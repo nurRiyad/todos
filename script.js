@@ -1,6 +1,7 @@
 let form = document.forms['add-items'];
 let list = document.querySelector('#list')
 let leftItem = document.querySelector(".activeCount");
+let status = document.querySelector("#status-bar")
 
 form.addEventListener('submit', (event) => {
 
@@ -63,8 +64,44 @@ list.addEventListener('change', (event) => {
 })
 
 
+status.addEventListener('click', (event) => {
+    let x = event.target.textContent;
+    let arr = list.querySelectorAll("li");
+    if (x == "All") {
+        for (let eachLi of arr) {
+            eachLi.style.display = "block";
+        }
+    }
+    else if (x == "Active") {
+        for (let eachLi of arr) {
+            if (isChecked(eachLi)) {
+                eachLi.style.display = "none";
+            }
+            else {
+                eachLi.style.display = "block";
+            }
+        }
+    }
+    else {
+        for (let eachLi of arr) {
+            if (!isChecked(eachLi)) {
+                eachLi.style.display = "none";
+            }
+            else {
+                eachLi.style.display = "block";
+            }
+        }
+    }
+});
+
+
+
 function updateItemLeft() {
     let count = list.childElementCount;
     leftItem.textContent = (count > 1) ? `${count} items left` : `${count} item left`;
 }
 
+function isChecked(element) {
+    let checkvalue = element.querySelector("input").checked;
+    return checkvalue;
+}
