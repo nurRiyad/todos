@@ -35,6 +35,10 @@ form.addEventListener('submit', (event) => {
 
     //adding newly created li element to the list 
     if (!isEmpty(newTask)) {
+        if (document.getElementById("cp").classList.contains("activePhase")) {
+            newli.style.display = "none";
+            list.appendChild(newli);
+        }
         list.appendChild(newli);
         updateItemLeft();
     }
@@ -57,10 +61,18 @@ list.addEventListener('change', (event) => {
     if (event.target.checked) {
         //console.log(taskli, "is checked");
         taskli.innerHTML = "<del>" + taskli.textContent + "</del>";
+        if (document.getElementById("ac").classList.contains("activePhase")) {
+            event.target.parentElement.style.display = "none";
+        }
+
     }
     else {
         //console.log(taskli, "is not checked");
         taskli.innerHTML = taskli.textContent;
+        if (document.getElementById("cp").classList.contains("activePhase")) {
+            event.target.parentElement.style.display = "none";
+        }
+
 
     }
     updateItemLeft();
@@ -68,14 +80,20 @@ list.addEventListener('change', (event) => {
 
 
 status.addEventListener('click', (event) => {
-    let x = event.target.textContent;
+    let x = event.target.value;
     let arr = list.querySelectorAll("li");
-    if (x == "All") {
+    if (x == "all") {
+        document.getElementById("al").classList.add("activePhase");
+        document.getElementById("ac").classList.remove("activePhase");
+        document.getElementById("cp").classList.remove("activePhase");
         for (let eachLi of arr) {
             eachLi.style.display = "block";
         }
     }
-    else if (x == "Active") {
+    else if (x == "active") {
+        document.getElementById("ac").classList.add("activePhase");
+        document.getElementById("al").classList.remove("activePhase");
+        document.getElementById("cp").classList.remove("activePhase");
         for (let eachLi of arr) {
             if (isChecked(eachLi)) {
                 eachLi.style.display = "none";
@@ -85,7 +103,10 @@ status.addEventListener('click', (event) => {
             }
         }
     }
-    else if (x == "Completed") {
+    else if (x == "complete") {
+        document.getElementById("cp").classList.add("activePhase");
+        document.getElementById("al").classList.remove("activePhase");
+        document.getElementById("ac").classList.remove("activePhase");
         for (let eachLi of arr) {
             if (!isChecked(eachLi)) {
                 eachLi.style.display = "none";
@@ -103,7 +124,6 @@ status.addEventListener('click', (event) => {
         }
     }
 });
-
 
 
 function updateItemLeft() {
