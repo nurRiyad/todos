@@ -8,7 +8,7 @@ form.addEventListener('submit', (event) => {
     //Getting the the from the input field and reset to defaults
     event.preventDefault();
     let newTask = form.querySelector('input[type="text"]').value;
-    console.log(newTask);
+    //console.log(newTask);
     form.reset();
 
     //Creating a new element
@@ -34,8 +34,10 @@ form.addEventListener('submit', (event) => {
 
 
     //adding newly created li element to the list 
-    list.appendChild(newli);
-    updateItemLeft();
+    if (!isEmpty(newTask)) {
+        list.appendChild(newli);
+        updateItemLeft();
+    }
 
 });
 
@@ -118,4 +120,11 @@ function updateItemLeft() {
 function isChecked(element) {
     let checkvalue = element.querySelector("input").checked;
     return checkvalue;
+}
+
+function isEmpty(str) {
+    for (let char of str) {
+        if (char != ' ') return false;
+    }
+    return true;
 }
