@@ -83,13 +83,20 @@ status.addEventListener('click', (event) => {
             }
         }
     }
-    else {
+    else if (x == "Completed") {
         for (let eachLi of arr) {
             if (!isChecked(eachLi)) {
                 eachLi.style.display = "none";
             }
             else {
                 eachLi.style.display = "block";
+            }
+        }
+    }
+    else {
+        for (let eachLi of arr) {
+            if (isChecked(eachLi)) {
+                eachLi.parentElement.removeChild(eachLi);
             }
         }
     }

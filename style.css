@@ -56,7 +56,7 @@ li .task{
     cursor: pointer;
     color: white;
 }
-.active, .all, .compelted{
+.active, .all, .compelted, .clearComplete{
     float: right;
     margin-right: 5px;
 }
