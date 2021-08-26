@@ -1,0 +1,51 @@
+#wrapper {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 6px;
+    box-shadow: 0px 1px 6px rgba(100, 70, 70, 0.2);
+    box-sizing: border-box;
+    padding: 0 0 20px;
+    overflow: hidden;
+    border: 1px solid lightgray;
+}
+
+#page-banner{
+    font-size: 2rem;
+    text-align: center;
+    color: blueviolet;
+}
+
+input[type=text] {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+
+#work-list li {
+    list-style-type: none;
+    padding: 0;
+    margin: 30px;
+    padding: 20px;
+    border-left: 5px solid #ddd;
+    margin: 20px 10px;
+}
+
+#status-bar li{
+    display: inline;
+}
+
+.delete {
+    float: right;
+    background: #e24e55;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+}
+.active, .all, .compelted{
+    float: right;
+    margin-right: 5px;
+}
