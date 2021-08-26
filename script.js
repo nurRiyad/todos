@@ -61,6 +61,7 @@ list.addEventListener('change', (event) => {
         taskli.innerHTML = taskli.textContent;
 
     }
+    updateItemLeft();
 })
 
 
@@ -97,7 +98,13 @@ status.addEventListener('click', (event) => {
 
 
 function updateItemLeft() {
-    let count = list.childElementCount;
+    let allLi = list.querySelectorAll("li");
+    let count = 0;
+    for (let eachLi of allLi) {
+        if (!isChecked(eachLi)) {
+            count += 1;
+        }
+    }
     leftItem.textContent = (count > 1) ? `${count} items left` : `${count} item left`;
 }
 
