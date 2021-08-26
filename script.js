@@ -38,7 +38,7 @@ form.addEventListener('submit', (event) => {
 
 });
 
-list.addEventListener('click', function (event) {
+list.addEventListener('click', (event) => {
     if (event.target.className == 'delete') {
         const li = event.target.parentElement;
         li.parentElement.removeChild(li);
@@ -47,7 +47,24 @@ list.addEventListener('click', function (event) {
 });
 
 
+list.addEventListener('change', (event) => {
+    let parentli = event.target.parentElement;
+    let taskli = parentli.querySelector(".task");
+    //console.log(event.target.checked)
+    if (event.target.checked) {
+        //console.log(taskli, "is checked");
+        taskli.innerHTML = "<del>" + taskli.textContent + "</del>";
+    }
+    else {
+        //console.log(taskli, "is not checked");
+        taskli.innerHTML = taskli.textContent;
+
+    }
+})
+
+
 function updateItemLeft() {
     let count = list.childElementCount;
     leftItem.textContent = (count > 1) ? `${count} items left` : `${count} item left`;
 }
+
