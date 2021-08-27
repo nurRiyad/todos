@@ -20,6 +20,7 @@ form.addEventListener('submit', (event) => {
     if (isValid(newTask)) {
         mainArray.push(tmp);
         printList("all");
+        updateItemLeft();
     }
 });
 
@@ -122,6 +123,7 @@ list.addEventListener('click', (event) => {
                     if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
                     if (document.getElementById("al").classList.contains("activePhase")) printList("all");
                     if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
+                    updateItemLeft();
                 }
             }
         }
@@ -140,6 +142,7 @@ list.addEventListener('change', (event) => {
             if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
             if (document.getElementById("al").classList.contains("activePhase")) printList("all");
             if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
+            updateItemLeft();
             break;
         }
     }
@@ -154,18 +157,21 @@ status.addEventListener('click', (event) => {
         document.getElementById("ac").classList.remove("activePhase");
         document.getElementById("cp").classList.remove("activePhase");
         printList("all");
+        updateItemLeft();
     }
     else if (x == "active") {
         document.getElementById("ac").classList.add("activePhase");
         document.getElementById("al").classList.remove("activePhase");
         document.getElementById("cp").classList.remove("activePhase");
         printList("active");
+        updateItemLeft();
     }
     else if (x == "complete") {
         document.getElementById("cp").classList.add("activePhase");
         document.getElementById("al").classList.remove("activePhase");
         document.getElementById("ac").classList.remove("activePhase");
         printList("complete");
+        updateItemLeft();
     }
     else {
 
@@ -177,6 +183,7 @@ status.addEventListener('click', (event) => {
         if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
         if (document.getElementById("al").classList.contains("activePhase")) printList("all");
         if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
+        updateItemLeft();
     }
 });
 
@@ -184,10 +191,8 @@ status.addEventListener('click', (event) => {
 function updateItemLeft() {
     let allLi = list.querySelectorAll("li");
     let count = 0;
-    for (let eachLi of allLi) {
-        if (!isChecked(eachLi)) {
-            count += 1;
-        }
+    for (let eachLi of mainArray) {
+        if (eachLi.checked == false) count += 1;
     }
     leftItem.textContent = (count > 1) ? `${count} items left` : `${count} item left`;
 }
