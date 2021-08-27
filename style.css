@@ -72,3 +72,7 @@ li .task{
 .activePhase{
     background-color: darkorange;
 }
+
+input[id=cc]:hover{
+    background-color: darkorange;
+}
