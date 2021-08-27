@@ -14,7 +14,6 @@ form.addEventListener('submit', (event) => {
 
     let tmp = {
         task: newTask,
-        all: true,
         checked: false
     };
     if (isValid(newTask)) {
