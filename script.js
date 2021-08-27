@@ -3,82 +3,149 @@ let list = document.querySelector('#list')
 let leftItem = document.querySelector(".activeCount");
 let status = document.querySelector("#status-bar")
 
+let mainArray = [];
+
+//Adding new element to the mainArray and Print Update
 form.addEventListener('submit', (event) => {
 
-    //Getting the the from the input field and reset to defaults
     event.preventDefault();
-    let newTask = form.querySelector('input[type="text"]').value;
-    //console.log(newTask);
+    let newTask = event.target.querySelector('input[type="text"]').value;
     form.reset();
 
-    //Creating a new element
+    let tmp = {
+        task: newTask,
+        all: true,
+        checked: false
+    };
+    if (isValid(newTask)) {
+        mainArray.push(tmp);
+        printList("all");
+    }
+});
+
+
+//Check is this task exist or is a empty task
+function isValid(task) {
+    let isEmpty = true;
+    for (let char of task) {
+        if (char != ' ') {
+            isEmpty = false;
+            break;
+        }
+    }
+    let isDuplicate = false;
+    for (let eachLi of mainArray) {
+        if (eachLi.task == task) {
+            isDuplicate = true;
+            break;
+        }
+    }
+    if (isEmpty || isDuplicate) return false;
+    else return true;
+
+}
+
+//Create A new element for the Object
+function createLi(obj) {
+
     let newli = document.createElement('li');
     let taskSpan = document.createElement('span');
     let deleteSpan = document.createElement('span');
     let checkbox = document.createElement('input');
 
-    //Adding class and property to newly created element
-    taskSpan.textContent = newTask;
+    let task = obj.task;
+    if (obj.checked) {
+        task = "<del>" + obj.task + "</del>";
+    }
+
+    taskSpan.innerHTML = task;
     taskSpan.setAttribute("class", "task");
     deleteSpan.textContent = "Delete";
     deleteSpan.setAttribute("class", "delete");
     checkbox.type = "checkbox";
     checkbox.name = "complete";
     checkbox.id = "compelete";
+    if (obj.checked) {
+        checkbox.checked = true;
+    }
 
 
-    //adding new task and delete span to the li element
     newli.appendChild(checkbox);
     newli.appendChild(taskSpan);
     newli.appendChild(deleteSpan);
+    return newli;
+}
 
 
-    //adding newly created li element to the list 
-    if (!isEmpty(newTask)) {
-        if (document.getElementById("cp").classList.contains("activePhase")) {
-            newli.style.display = "none";
-            list.appendChild(newli);
+//Printing the list function
+function printList(status) {
+
+    list.innerHTML = '';
+    if (status == "all") {
+        for (eachLi of mainArray) {
+            let tmpLi = createLi(eachLi);
+            list.appendChild(tmpLi);
         }
-        list.appendChild(newli);
-        updateItemLeft();
     }
+    else if (status == "active") {
+        for (eachLi of mainArray) {
+            if (!eachLi.checked) {
+                let tmpLi = createLi(eachLi);
+                list.appendChild(tmpLi);
+            }
+        }
+    }
+    else if (status == "complete") {
+        for (eachLi of mainArray) {
+            if (eachLi.checked) {
+                let tmpLi = createLi(eachLi);
+                list.appendChild(tmpLi);
+            }
+        }
+    }
+}
 
-});
 
+// Delete functionality 
 list.addEventListener('click', (event) => {
     if (event.target.className == 'delete') {
-        const li = event.target.parentElement;
-        li.parentElement.removeChild(li);
-        updateItemLeft();
+        let li = event.target.parentElement;
+        let task = li.querySelector(".task").textContent;
+        //console.log(task);
+        for (eachLi of mainArray) {
+            if (eachLi.task == task) {
+                let index = mainArray.indexOf(eachLi);
+                //console.log("index = ", index);
+                if (index > -1) {
+                    mainArray.splice(index, 1);
+                    //Update the list view
+                    if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
+                    if (document.getElementById("al").classList.contains("activePhase")) printList("all");
+                    if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
+                }
+            }
+        }
     }
 });
 
 
+//Added checked and unchecked functionality
 list.addEventListener('change', (event) => {
     let parentli = event.target.parentElement;
-    let taskli = parentli.querySelector(".task");
-    //console.log(event.target.checked)
-    if (event.target.checked) {
-        //console.log(taskli, "is checked");
-        taskli.innerHTML = "<del>" + taskli.textContent + "</del>";
-        if (document.getElementById("ac").classList.contains("activePhase")) {
-            event.target.parentElement.style.display = "none";
+    let task = parentli.querySelector(".task").textContent;
+    for (let i = 0; i < mainArray.length; i++) {
+        if (mainArray[i].task == task) {
+            if (mainArray[i].checked) mainArray[i].checked = false;
+            else mainArray[i].checked = true;
+            if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
+            if (document.getElementById("al").classList.contains("activePhase")) printList("all");
+            if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
+            break;
         }
-
     }
-    else {
-        //console.log(taskli, "is not checked");
-        taskli.innerHTML = taskli.textContent;
-        if (document.getElementById("cp").classList.contains("activePhase")) {
-            event.target.parentElement.style.display = "none";
-        }
+});
 
-
-    }
-    updateItemLeft();
-})
-
-
+//update the complete all and active status
 status.addEventListener('click', (event) => {
     let x = event.target.value;
     let arr = list.querySelectorAll("li");
@@ -86,42 +153,30 @@ status.addEventListener('click', (event) => {
         document.getElementById("al").classList.add("activePhase");
         document.getElementById("ac").classList.remove("activePhase");
         document.getElementById("cp").classList.remove("activePhase");
-        for (let eachLi of arr) {
-            eachLi.style.display = "block";
-        }
+        printList("all");
     }
     else if (x == "active") {
         document.getElementById("ac").classList.add("activePhase");
         document.getElementById("al").classList.remove("activePhase");
         document.getElementById("cp").classList.remove("activePhase");
-        for (let eachLi of arr) {
-            if (isChecked(eachLi)) {
-                eachLi.style.display = "none";
-            }
-            else {
-                eachLi.style.display = "block";
-            }
-        }
+        printList("active");
     }
     else if (x == "complete") {
         document.getElementById("cp").classList.add("activePhase");
         document.getElementById("al").classList.remove("activePhase");
         document.getElementById("ac").classList.remove("activePhase");
-        for (let eachLi of arr) {
-            if (!isChecked(eachLi)) {
-                eachLi.style.display = "none";
-            }
-            else {
-                eachLi.style.display = "block";
-            }
-        }
+        printList("complete");
     }
     else {
-        for (let eachLi of arr) {
-            if (isChecked(eachLi)) {
-                eachLi.parentElement.removeChild(eachLi);
-            }
+
+        let newArry = [];
+        for (let i = 0; i < mainArray.length; i++) {
+            if (mainArray[i].checked == false) newArry.push(mainArray[i]);
         }
+        mainArray = newArry;
+        if (document.getElementById("cp").classList.contains("activePhase")) printList("complete");
+        if (document.getElementById("al").classList.contains("activePhase")) printList("all");
+        if (document.getElementById("ac").classList.contains("activePhase")) printList("active");
     }
 });
 
@@ -135,16 +190,4 @@ function updateItemLeft() {
         }
     }
     leftItem.textContent = (count > 1) ? `${count} items left` : `${count} item left`;
-}
-
-function isChecked(element) {
-    let checkvalue = element.querySelector("input").checked;
-    return checkvalue;
-}
-
-function isEmpty(str) {
-    for (let char of str) {
-        if (char != ' ') return false;
-    }
-    return true;
 }
