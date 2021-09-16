@@ -77,3 +77,6 @@ li .task{
 input[id=cc]:hover{
     background-color: darkorange;
 }
+#list:hover {
+  border-color: darkorange;
+}
